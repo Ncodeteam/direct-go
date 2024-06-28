@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/Ncodeteam/direct-go/services/autoload"
 )
 
 func main() {
@@ -11,7 +13,7 @@ func main() {
 	fmt.Print("Enter URL: ")
 	fmt.Scanln(&url)
 
-	file_name, dlLink, err := direct_link(url)
+	file_name, dlLink, err := autoload.DirectLink(url)
 	if err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)
