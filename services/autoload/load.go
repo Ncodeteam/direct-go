@@ -2,6 +2,7 @@ package autoload
 
 import (
 	"errors"
+	"regexp"
 	"strings"
 
 	"github.com/Ncodeteam/direct-go/services/direk"
@@ -19,6 +20,7 @@ func DirectLink(url string) (string, string, error) {
 		"https://gofile.io/",
 		"https://wetransfer.com/",
 		"https://we.tl/",
+		"https://u.pcloud.link/",
 	} {
 		if strings.HasPrefix(url, prefix) {
 			switch prefix {
@@ -34,8 +36,17 @@ func DirectLink(url string) (string, string, error) {
 				return direk.Wetransfer(url)
 			case "https://we.tl/":
 				return direk.Wetransfer(url)
+			case "https://u.pcloud.link/":
+				return direk.Pcloud(url)
 			}
 		}
+	}
+	if strings.HasPrefix(url, "https://github.com") {
+		releasesURL := regexp.MustCompile(`(?i)\bhttps?://.*github\.com/[^/]+/[^/]+/releases/download/[^/]+/[^/]+$`)
+		if !releasesURL.MatchString(url) {
+			return "", "", errors.New("wrong Link it's suppose like this for example https://github.com/ViRb3/wgcf/releases/download/v2.2.22/wgcf_2.2.22_freebsd_386")
+		}
+		return direk.Github(url)
 	}
 
 	return "", "", nil
